@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+
+  # Redis
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./media:/server/media
+
+    env_file:
+      - ".env"
+    environment:
+      - CELERY_BROKER=redis://redis:6379
+      - CELERY_BACKEND=redis://redis:6379
+    container_name: rosstat_app
+    restart: on-failure
+
+  celery:
+      build:
+        context: .
+      command: celery --app rosstat worker --beat --loglevel=info
+      volumes:
+        - .:/server
+      container_name: celery
+      environment:
+        - CELERY_BROKER=redis://redis:6379
+        - CELERY_BACKEND=redis://redis:6379
+      depends_on:
+        - redis
+        - app
+
