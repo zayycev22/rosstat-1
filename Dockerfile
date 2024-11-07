@@ -7,8 +7,6 @@ COPY requirements.txt requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /server/requirements.txt
 
-RUN mkdir /server/media
-
 COPY . /server/
 
 RUN python3 manage.py migrate

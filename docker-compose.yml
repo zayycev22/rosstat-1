@@ -22,7 +22,6 @@ services:
     environment:
       - CELERY_BROKER=redis://redis:6379
       - CELERY_BACKEND=redis://redis:6379
-      - DB_HOST=host.docker.internal
     container_name: rosstat_app
     restart: on-failure
 
