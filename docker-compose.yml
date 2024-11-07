@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - "8030:8000"
     volumes:
       - ./media:/server/media
 
@@ -22,6 +22,7 @@ services:
     environment:
       - CELERY_BROKER=redis://redis:6379
       - CELERY_BACKEND=redis://redis:6379
+      - DB_HOST=host.docker.internal
     container_name: rosstat_app
     restart: on-failure
 
