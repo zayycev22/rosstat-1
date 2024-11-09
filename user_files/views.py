@@ -80,6 +80,7 @@ class DownloadFile(APIView):
             response['Content-Disposition'] = f'attachment; filename={file_obj.filename}'
             response['filename'] = file_obj.filename
             response['Cache-Control'] = 'no-cache'
+            response["Access-Control-Expose-Headers"] = "Content-Disposition"
             return response
 
 
