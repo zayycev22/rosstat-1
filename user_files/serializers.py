@@ -12,7 +12,7 @@ class FileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserFile
-        fields = ('filename',)
+        fields = ('filename', 'created_exp')
 
 
 class FilenameSerializer(serializers.Serializer):
