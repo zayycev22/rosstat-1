@@ -12,6 +12,7 @@ from rest_framework.request import Request as RestRequest
 from rest_framework.parsers import MultiPartParser
 from django.conf import settings
 
+from global_settings.models import GlobalSettings
 from user_files.consts import UserFileConsts
 from user_files.models import UserFile
 from rest_framework.generics import ListAPIView
@@ -36,14 +37,15 @@ class UploadFile(APIView):
         serializer = FileUploadSerializer(data=request.data)
         if serializer.is_valid():
             uploaded_file: InMemoryUploadedFile = request.FILES['file']
-            if uploaded_file.size > settings.FILE_SIZE_BYTES:
-                return Response({"status": "Error", "detail": "Файл превысил объем"})
+            file_size = GlobalSettings.objects.get(id=1)
+            file_size_bytes = file_size.file_size * 1024 * 1024
+            if uploaded_file.size > file_size_bytes:
+                return Response({"status": "Error", "detail": "Файл превысил объем"}, status=406)
             try:
                 user_file = UserFile.objects.get(filename=uploaded_file.name, user=request.user)
                 user_file.file.delete()
                 user_file.file = uploaded_file
-                user_file.created_exp = datetime.datetime.now() + datetime.timedelta(
-                    seconds=settings.FILE_LIFETIME_SECONDS)
+                user_file.created_exp = datetime.datetime.now()
                 user_file.save()
             except UserFile.DoesNotExist:
                 exp = datetime.datetime.now() + datetime.timedelta(

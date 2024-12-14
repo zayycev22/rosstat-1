@@ -1,13 +1,14 @@
 from django.db import models
 
 from auth_user.models import ExUser
+from rosstat.backend_storages import YandexStorage
 
 
 class UserFile(models.Model):
     user = models.ForeignKey(ExUser, on_delete=models.CASCADE, verbose_name="Пользователь")
-    file = models.FileField(verbose_name="Файл")
+    file = models.FileField(storage=YandexStorage(), verbose_name="Файл")
     filename = models.CharField(max_length=128)
-    created_exp = models.DateTimeField(verbose_name="Дата удаления")
+    created_exp = models.DateTimeField(verbose_name="Дата создания")
 
     def __str__(self):
         return self.file.name
