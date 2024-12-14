@@ -16,7 +16,6 @@ services:
       - "8030:8000"
     volumes:
       - ./media:/server/media
-      - ./static:/server/static
 
     env_file:
       - ".env"
