@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'user_files',
+    'global_settings',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,10 @@ FILE_SIZE_BYTES = 5242880  # 5 MB
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://localhost:6379")
 CELERY_ACCEPT_CONTENT = ['application/json']
 result_backend = os.environ.get("CELERY_BACKEND", "redis://localhost:6379")
+
+
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+AWS_S3_ACCESS_KEY_ID = os.getenv("AWS_S3_ACCESS_KEY_ID")
+AWS_S3_SECRET_ACCESS_KEY = os.getenv("AWS_S3_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
