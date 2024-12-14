@@ -3,7 +3,7 @@ from io import BytesIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import StreamingHttpResponse
-from drf_spectacular.utils import inline_serializer, extend_schema, OpenApiParameter
+from drf_spectacular.utils import inline_serializer, extend_schema
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from rest_framework.request import Request as RestRequest
 from rest_framework.parsers import MultiPartParser
 from django.conf import settings
 
-from global_settings.models import GlobalSettings
+from global_settings.models import GlobalSettings, FileExtension
 from user_files.consts import UserFileConsts
 from user_files.models import UserFile
 from rest_framework.generics import ListAPIView
@@ -41,6 +41,10 @@ class UploadFile(APIView):
             file_size_bytes = file_size.file_size * 1024 * 1024
             if uploaded_file.size > file_size_bytes:
                 return Response({"status": "Error", "detail": "Файл превысил объем"}, status=406)
+            extension = uploaded_file.name.split('.')[-1]
+            extensions = FileExtension.objects.filter(extension=extension)
+            if not extensions.exists():
+                return Response({"status": "Error", "detail": "Неподдерживаемый формат файла"}, status=406)
             try:
                 user_file = UserFile.objects.get(filename=uploaded_file.name, user=request.user)
                 user_file.file.delete()

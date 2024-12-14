@@ -16,7 +16,8 @@ class GlobalSettings(models.Model):
 
 
 class FileExtension(models.Model):
-    extension = models.CharField(max_length=4, verbose_name="Расширение файла", choices=FileExtensionConsts.extensions)
+    extension = models.CharField(max_length=4, verbose_name="Расширение файла", choices=FileExtensionConsts.extensions,
+                                 unique=True)
 
     def __str__(self):
         return self.extension
