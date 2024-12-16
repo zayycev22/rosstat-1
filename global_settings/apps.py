@@ -8,6 +8,7 @@ class GlobalSettingsConfig(AppConfig):
     def ready(self):
         from django.db.models.signals import post_migrate
         from global_settings.models import GlobalSettings
+        import global_settings.signals
 
         def configure_yandex_storage(sender, **kwargs):
             from rosstat.backend_storages import YandexStorage
